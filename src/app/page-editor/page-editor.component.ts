@@ -101,8 +101,15 @@ export class PageEditorComponent implements OnInit
 
   touchAllControls(fg: FormGroup): void {
     fg.markAsTouched();
-    for(let i in fg.controls) {
-      fg.controls[i].markAsTouched();
+
+    // A bit hacky but works.
+    // Recurse down controls and mark as touched.
+    for(let key in fg.controls) {
+      const control = fg.controls[key] as any;
+      control.markAsTouched();
+      if (control.controls) {
+        this.touchAllControls(control);
+      }
     }
   }
 
