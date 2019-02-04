@@ -9,7 +9,7 @@ export class AppComponent  {
   initialData: Page = {
     elements: [
       {
-        elementType: 'Text',
+        elementType: 'Basic text',
         elementText: 'Hello Page Editor!'
       },
       {
@@ -20,6 +20,7 @@ export class AppComponent  {
   }
 
   post(data: Page) {
+    console.log('Form submission detected.');
     console.log(data);
   }
 }

@@ -1,6 +1,6 @@
 <!-- controls -->
-<button class="btn btn-secondary mr-3 my-1" (click)="addElement()">Add Element</button>
-<button class="btn btn-danger mr-3 my-1" (click)="resetForm()">Reset Form</button>
+<button class="btn btn-secondary mr-3 my-1" (click)="addBlankElement()">Add Element</button>
+<button class="btn btn-danger mr-3 my-1" (click)="init()">Reset Form</button>
 <button class="btn btn-primary my-1" (click)="submitForm()" [disabled]="!form.valid">
   Submit <span *ngIf="!form.valid">(disabled - form invalid)</span>
 </button>
@@ -29,5 +29,5 @@
 <!-- just for info -->
 <div class="card p-3 my-5">
   <h2>Form Value</h2>
-  {{ formValue }}
+  {{ formValueAsString }}
 </div>

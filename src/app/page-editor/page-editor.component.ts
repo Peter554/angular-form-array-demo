@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormArray, FormGroup, Validators } from '@angular/forms';
 import { Page, PageElement } from '../models/page';
 
@@ -10,7 +10,10 @@ import { Page, PageElement } from '../models/page';
 export class PageEditorComponent implements OnInit
 {
   @Input()
-  initialData: Page;
+  initialData: Page = null;
+
+  @Output()
+  pageSubmit = new EventEmitter<Page>();
 
   constructor(private fb: FormBuilder) { }
 
@@ -18,29 +21,43 @@ export class PageEditorComponent implements OnInit
   showElement = 0;
 
   ngOnInit() {
-    this.resetForm();
+    this.init();
   }
 
-  resetForm(): void {
+  init(): void {
     this.showElement = 0;
 
     this.form = this.fb.group({
       elements: this.fb.array([])
     })
 
-    this.addElement();
+    if (this.initialData) {
+      this.initialData.elements.forEach(element => {
+        this.addElement(element);
+      })
+      this.showElement = 0;
+    } else {
+      this.addBlankElement();
+    }    
   }
-  
-  getBlankElement(): FormGroup {
-    return this.fb.group({
+
+  addBlankElement(): void {
+    const elementForm = this.fb.group({
       elementType: ['', [Validators.required]],
       elementText: ['', [Validators.required, Validators.minLength(5)]],
     })
+
+    this.elements.push(elementForm);
+    this.navToElement(this.elements.length - 1);
   }
 
-  addElement(): void {
-    const newElement = this.getBlankElement();
-    this.elements.push(newElement);
+  addElement(element: PageElement): void {
+    const elementForm = this.fb.group({
+      elementType: [element.elementType, [Validators.required]],
+      elementText: [element.elementText, [Validators.required, Validators.minLength(5)]],
+    })
+
+    this.elements.push(elementForm);
     this.navToElement(this.elements.length - 1);
   }
 
@@ -71,16 +88,16 @@ export class PageEditorComponent implements OnInit
 
   touchAllControls(fg: FormGroup): void {
     fg.markAsTouched();
-      for(let i in fg.controls) {
-        fg.controls[i].markAsTouched();
-      }
+    for(let i in fg.controls) {
+      fg.controls[i].markAsTouched();
+    }
   }
 
   submitForm(): void {
-    console.log(this.formValue);
+    this.pageSubmit.emit(this.form.value);
   }
 
-  get formValue(): string {
+  get formValueAsString(): string {
     return JSON.stringify(this.form.value, null ,2);
   }
 }

@@ -4,5 +4,5 @@
     A demo of a dynamic form in angular using a FormArray including validation. 
   </p>
     
-  <page-editor [initialData]="initialData"></page-editor>
+  <page-editor [initialData]="initialData" (pageSubmit)="post($event)"></page-editor>
 </div>
