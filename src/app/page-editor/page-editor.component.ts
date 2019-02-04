@@ -71,6 +71,7 @@ export class PageEditorComponent implements OnInit
 
   deleteElement(idx: number) {
     this.elements.removeAt(idx);
+    this.showElement = Math.max(this.showElement - 1, 0);
   }
 
   get elements(): FormArray {
