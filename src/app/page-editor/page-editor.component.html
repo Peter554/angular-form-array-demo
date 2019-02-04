@@ -1,0 +1,33 @@
+<!-- controls -->
+<button class="btn btn-secondary mr-3 my-1" (click)="addElement()">Add Element</button>
+<button class="btn btn-danger mr-3 my-1" (click)="resetForm()">Reset Form</button>
+<button class="btn btn-primary my-1" (click)="submitForm()" [disabled]="!form.valid">
+  Submit <span *ngIf="!form.valid">(disabled - form invalid)</span>
+</button>
+<!-- a friendly message -->
+<div class="alert alert-secondary my-3" role="alert">
+  Please configure your page elements now!
+</div>
+
+<!-- page element listing and editor -->
+<div class="row">
+  <!-- listing -->
+  <div class="col-5">
+    <div *ngFor="let element of elements.controls; let i = index;">
+      <div class="card p-3 my-1 selectable" (click)="navToElement(i)"
+      [ngClass]="{'selected': i == showElement}">
+        Element {{ i + 1 }} <span class="invalid-element" *ngIf="!element.valid && allControlsAreTouched(element)">(invalid)</span>
+      </div>
+    </div>
+  </div>
+  <!-- editor -->
+  <div class="col-7">
+    <page-element-editor [element]="selectedElement"></page-element-editor>
+  </div>
+</div>
+
+<!-- just for info -->
+<div class="card p-3 my-5">
+  <h2>Form Value</h2>
+  {{ formValue }}
+</div>

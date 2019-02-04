@@ -1,0 +1,15 @@
+.card { 
+  &.selectable:hover {
+    background-color: #eee;
+    cursor: pointer;
+  }
+
+  &.selected {
+    background-color: #eee;
+  }
+}
+
+.invalid-element {
+  color: rgba(250, 0, 0, 0.8);
+}
+  
