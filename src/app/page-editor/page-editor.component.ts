@@ -92,9 +92,19 @@ export class PageEditorComponent implements OnInit
   }
 
   allControlsAreTouched(fg: FormGroup): boolean {
-    for(let i in fg.controls) {
-      if (!fg.controls[i].touched) {
+    for(let key in fg.controls) {
+      const control = fg.controls[key] as any;
+      if (!control.touched) {
         return false;
+      }
+
+    // A bit hacky but works.
+    // Recurse down controls and mark as touched.
+      if (control.controls) {
+        const allChildrenAreTouched = this.allControlsAreTouched(control);
+        if (!allChildrenAreTouched) {
+          return false;
+        }
       }
     }
     
@@ -103,12 +113,11 @@ export class PageEditorComponent implements OnInit
 
   touchAllControls(fg: FormGroup): void {
     fg.markAsTouched();
-
-    // A bit hacky but works.
-    // Recurse down controls and mark as touched.
     for(let key in fg.controls) {
       const control = fg.controls[key] as any;
       control.markAsTouched();
+      // A bit hacky but works.
+      // Recurse down controls and mark as touched.
       if (control.controls) {
         this.touchAllControls(control);
       }
