@@ -18,7 +18,6 @@ export class PageElementEditorComponent implements OnInit
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
-    console.log(this.notes);
   }
 
   get notes(): FormArray {

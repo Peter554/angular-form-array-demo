@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormArray, FormGroup, Validators } from '@angular/forms';
-import { Page, PageElement, PageElementNote } from '../models/page';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { Page, PageElement } from '../models/page';
+import { from } from 'rxjs';
 
 @Component({
   selector: 'page-editor',
@@ -113,11 +115,32 @@ export class PageEditorComponent implements OnInit
     }
   }
 
+  reorderElements(dragDropEvent: CdkDragDrop<any>): void {
+    const fromIdx = dragDropEvent.previousIndex;
+    const toIdx = dragDropEvent.currentIndex;
+    const elementToMove = this.elements.at(fromIdx);
+
+    this.elements.removeAt(fromIdx);
+    this.elements.insert(toIdx, elementToMove);
+    
+    if (fromIdx == this.showElement) {
+      this.showElement = toIdx;
+    } else if (fromIdx < this.showElement && toIdx >= this.showElement) {
+      this.showElement = this.showElement - 1;
+    } else if (fromIdx > this.showElement && toIdx <= this.showElement) {
+      this.showElement = this.showElement + 1;
+    }
+  }
+
   submitForm(): void {
     this.pageSubmit.emit(this.form.value);
   }
 
   get formValueAsString(): string {
     return JSON.stringify(this.form.value, null ,2);
+  }
+
+  getPreview(text: string): string {
+    return text.length > 20 ? text.substring(0, 18) + '...' : text;
   }
 }
