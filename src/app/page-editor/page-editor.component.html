@@ -14,20 +14,24 @@
   <!-- listing -->
   <div class="col-5">
     <div *ngFor="let element of elements.controls; let i = index;">
-      <div class="card p-3 my-1 selectable" (click)="navToElement(i)"
+      <div class="card my-1 selectable" (click)="navToElement(i)"
       [ngClass]="{'selected': i == showElement}">
-        Element {{ i + 1 }} <span class="invalid-element" *ngIf="!element.valid && allControlsAreTouched(element)">(invalid)</span>
+        <div class="card-body">
+          Element {{ i + 1 }} <span class="invalid-element" *ngIf="!element.valid && allControlsAreTouched(element)">(invalid)</span>
+        </div>
       </div>
     </div>
   </div>
   <!-- editor -->
-  <div class="col-7">
-    <page-element-editor [element]="selectedElement"></page-element-editor>
+  <div class="col-7" *ngIf="selectedElement">
+    <page-element-editor [element]="selectedElement" (deleteRequest)="deleteElement(showElement)"></page-element-editor>
   </div>
 </div>
 
 <!-- just for info -->
-<div class="card p-3 my-5">
-  <h2>Form Value</h2>
-  {{ formValueAsString }}
+<div class="card mt-5">
+  <div class="card-body">
+    <h2>Form Value</h2>
+    {{ formValueAsString }}
+  </div>
 </div>

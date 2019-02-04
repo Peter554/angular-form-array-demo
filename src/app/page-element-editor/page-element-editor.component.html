@@ -1,30 +1,35 @@
 <div [formGroup]="element">
-  <div class="card p-3">
-    <!-- element type -->
-    <div class="form-group">
-      <label for="">Element type</label>
-      <select class="form-control" formControlName="elementType" style="max-width: 400px"
-      [ngClass]="{'is-invalid': element.get('elementType').touched && element.get('elementType').errors}">
-        <option [value]="elementType" *ngFor="let elementType of elementTypes">{{ elementType }}</option>
-      </select>
-      <!-- validation -->
-      <div class="invalid-feedback" *ngIf="element.get('elementType').hasError('required') &&element.get('elementType').touched">
-        Element type is required.
+  <div class="card">
+    <div class="card-body">
+      <!-- element type -->
+      <div class="form-group">
+        <label for="">Element type</label>
+        <select class="form-control" formControlName="elementType"
+        [ngClass]="{'is-invalid': element.get('elementType').touched && element.get('elementType').errors}">
+          <option [value]="elementType" *ngFor="let elementType of elementTypes">{{ elementType }}</option>
+        </select>
+        <!-- validation -->
+        <div class="invalid-feedback" *ngIf="element.get('elementType').hasError('required') &&element.get('elementType').touched">
+          Element type is required.
+        </div>
       </div>
-    </div>
-
-    <!-- element text -->
-    <div class="form-group">
-      <label for="">Element text</label>
-      <input type="text" formControlName="elementText" class="form-control" style="max-width: 400px"
-      [ngClass]="{'is-invalid': element.get('elementText').touched && element.get('elementText').errors}">
-      <!-- validation -->
-      <div class="invalid-feedback" *ngIf="element.get('elementText').hasError('required') && element.get('elementText').touched">
-        Element text is required.
+  
+      <!-- element text -->
+      <div class="form-group">
+        <label for="">Element text</label>
+        <input type="text" formControlName="elementText" class="form-control"
+        [ngClass]="{'is-invalid': element.get('elementText').touched && element.get('elementText').errors}">
+        <!-- validation -->
+        <div class="invalid-feedback" *ngIf="element.get('elementText').hasError('required') && element.get('elementText').touched">
+          Element text is required.
+        </div>
+        <div class="invalid-feedback" *ngIf="element.get('elementText').hasError('minlength') && element.get('elementText').touched">
+          Element text must be at least 5 characters long.
+        </div>
       </div>
-      <div class="invalid-feedback" *ngIf="element.get('elementText').hasError('minlength') && element.get('elementText').touched">
-        Element text must be at least 5 characters long.
-      </div>
+  
+      <!-- buttons -->
+      <button class="btn btn-danger" (click)="makeDeleteRequest()">Delete Element</button>
     </div>
   </div>
 </div>

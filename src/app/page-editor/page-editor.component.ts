@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormArray, FormGroup, Validators } from '@angular/forms';
-import { Page, PageElement } from '../models/page';
+import { Page, PageElement, PageElementNote } from '../models/page';
 
 @Component({
   selector: 'page-editor',
@@ -45,6 +45,7 @@ export class PageEditorComponent implements OnInit
     const elementForm = this.fb.group({
       elementType: ['', [Validators.required]],
       elementText: ['', [Validators.required, Validators.minLength(5)]],
+      elementNotes: this.fb.array([])
     })
 
     this.elements.push(elementForm);
@@ -52,13 +53,24 @@ export class PageEditorComponent implements OnInit
   }
 
   addElement(element: PageElement): void {
+    const elementNoteForms = element.elementNotes.map(note => {
+        return this.fb.group({
+          noteText: [note.noteText, [Validators.required]]
+        })
+    })
+
     const elementForm = this.fb.group({
       elementType: [element.elementType, [Validators.required]],
       elementText: [element.elementText, [Validators.required, Validators.minLength(5)]],
+      elementNotes: this.fb.array(elementNoteForms)
     })
 
     this.elements.push(elementForm);
     this.navToElement(this.elements.length - 1);
+  }
+
+  deleteElement(idx: number) {
+    this.elements.removeAt(idx);
   }
 
   get elements(): FormArray {
