@@ -7,25 +7,30 @@
 <!-- a friendly message -->
 <div class="alert alert-secondary my-3" role="alert">
   Please configure your page elements now!
-</div>
+  <strong>Note: </strong> You can drag elements to reorder them!
+</div>  
 
 <!-- page element listing and editor -->
 <div class="row">
+
   <!-- listing -->
-  <div class="col-5">
-    <div *ngFor="let element of elements.controls; let i = index;">
+  <div class="col-5" cdkDropList (cdkDropListDropped)="reorderElements($event)">
+    <!-- NOTE - does the drag-drop click interfere with the nav to element click? -->
+    <div *ngFor="let element of elements.controls; let i = index;" cdkDrag>
       <div class="card my-1 selectable" (click)="navToElement(i)"
       [ngClass]="{'selected': i == showElement}">
         <div class="card-body">
-          Element {{ i + 1 }} <span class="invalid-element" *ngIf="!element.valid && allControlsAreTouched(element)">(invalid)</span>
+          {{ i + 1 }}. <em>{{ getPreview(element.get('elementText').value) }}</em> <span class="invalid-element" *ngIf="!element.valid && allControlsAreTouched(element)"> (invalid)</span>
         </div>
       </div>
     </div>
   </div>
+
   <!-- editor -->
   <div class="col-7" *ngIf="selectedElement">
     <page-element-editor [element]="selectedElement" (deleteRequest)="deleteElement(showElement)"></page-element-editor>
   </div>
+
 </div>
 
 <!-- just for info -->
