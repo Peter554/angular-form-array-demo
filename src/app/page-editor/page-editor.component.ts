@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormArray, FormGroup, Validators } from '@angular/forms';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Page, PageElement } from '../models/page';
-import { from } from 'rxjs';
+import { FormGroupFactoryService } from '../services/form-group-factory.service';
 
 @Component({
   selector: 'page-editor',
@@ -17,7 +17,7 @@ export class PageEditorComponent implements OnInit
   @Output()
   pageSubmit = new EventEmitter<Page>();
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private formGroupFactoryService: FormGroupFactoryService) { }
 
   form: FormGroup;
   showElement = 0;
@@ -29,9 +29,7 @@ export class PageEditorComponent implements OnInit
   init(): void {
     this.showElement = 0;
 
-    this.form = this.fb.group({
-      elements: this.fb.array([])
-    })
+    this.form = this.formGroupFactoryService.getBlankPageForm();
 
     if (this.initialData) {
       this.initialData.elements.forEach(element => {
@@ -44,32 +42,12 @@ export class PageEditorComponent implements OnInit
   }
 
   addBlankElement(): void {
-    const elementForm = this.fb.group({
-      elementType: ['', [Validators.required]],
-      elementText: ['', [Validators.required, Validators.minLength(5)]],
-      elementRules: this.fb.array([])
-    })
-
-    this.elements.push(elementForm);
+    this.elements.push(this.formGroupFactoryService.getBlankElementForm());
     this.navToElement(this.elements.length - 1);
   }
 
   addElement(element: PageElement): void {
-    const elementRuleForms = element.elementRules.map(rule => {
-        return this.fb.group({
-          question: [rule.question, [Validators.required]],
-          operator: [rule.operator, [Validators.required]],
-          keyScore: [rule.keyScore, [Validators.required]],
-        })
-    })
-
-    const elementForm = this.fb.group({
-      elementType: [element.elementType, [Validators.required]],
-      elementText: [element.elementText, [Validators.required, Validators.minLength(5)]],
-      elementRules: this.fb.array(elementRuleForms)
-    })
-
-    this.elements.push(elementForm);
+    this.elements.push(this.formGroupFactoryService.getElementForm(element));
     this.navToElement(this.elements.length - 1);
   }
 

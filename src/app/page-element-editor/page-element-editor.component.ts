@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit, OnChanges } from '@angu
 import { FormGroup, FormArray, Validators, FormBuilder } from '@angular/forms';
 import { DummyDatabaseService } from '../services/dummy-database.service';
 import { Subscription } from 'rxjs';
+import { FormGroupFactoryService } from '../services/form-group-factory.service';
 
 @Component({
   selector: 'page-element-editor',
@@ -17,7 +18,7 @@ export class PageElementEditorComponent implements OnInit, OnChanges
 
   elementTypeSubscription: Subscription;
 
-  constructor(private fb: FormBuilder, private dummyDatabase: DummyDatabaseService) { }
+  constructor(private dummyDatabase: DummyDatabaseService, private formGroupFactoryService: FormGroupFactoryService) { }
 
   ngOnInit() {
   }
@@ -61,13 +62,7 @@ export class PageElementEditorComponent implements OnInit, OnChanges
   }
 
   addRule(): void {
-    const emptyRule = this.fb.group({
-      question: [this.questions[0], [Validators.required]],
-      operator: [this.operators[0], [Validators.required]],
-      keyScore: [5, [Validators.required]],
-    })
-
-    this.rules.push(emptyRule);
+    this.rules.push(this.formGroupFactoryService.getBlankRuleForm());
   }
 
   deleteRule(idx: number): void {
