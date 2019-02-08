@@ -3,6 +3,7 @@ import { FormBuilder, FormArray, FormGroup, Validators } from '@angular/forms';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Page, PageElement } from '../models/page';
 import { FormGroupFactoryService } from '../services/form-group-factory.service';
+import { ValidationHelperService } from '../services/validation-helper.service';
 
 @Component({
   selector: 'page-editor',
@@ -17,7 +18,10 @@ export class PageEditorComponent implements OnInit
   @Output()
   pageSubmit = new EventEmitter<Page>();
 
-  constructor(private formGroupFactoryService: FormGroupFactoryService) { }
+  constructor(
+    private formGroupFactoryService: FormGroupFactoryService,
+    private validationHelper: ValidationHelperService
+    ) { }
 
   form: FormGroup;
   showElement = 0;
@@ -66,42 +70,13 @@ export class PageEditorComponent implements OnInit
 
   navToElement(i: number): void {
     if (i != this.showElement) {
-      this.touchAllControls(this.selectedElement);
+      this.validationHelper.touchAllControls(this.selectedElement);
       this.showElement = i;
     }
   }
 
-  allControlsAreTouched(fg: FormGroup): boolean {
-    for(let key in fg.controls) {
-      const control = fg.controls[key] as any;
-      if (!control.touched) {
-        return false;
-      }
-
-    // A bit hacky but works.
-    // Recurse down controls and mark as touched.
-      if (control.controls) {
-        const allChildrenAreTouched = this.allControlsAreTouched(control);
-        if (!allChildrenAreTouched) {
-          return false;
-        }
-      }
-    }
-    
-    return true;
-  }
-
-  touchAllControls(fg: FormGroup): void {
-    fg.markAsTouched();
-    for(let key in fg.controls) {
-      const control = fg.controls[key] as any;
-      control.markAsTouched();
-      // A bit hacky but works.
-      // Recurse down controls and mark as touched.
-      if (control.controls) {
-        this.touchAllControls(control);
-      }
-    }
+  elementIsInvalid(element: FormGroup): boolean {
+    return !element.valid && this.validationHelper.allControlsAreTouched(element);
   }
 
   reorderElements(dragDropEvent: CdkDragDrop<any>): void {
@@ -122,7 +97,11 @@ export class PageEditorComponent implements OnInit
   }
 
   submitForm(): void {
-    this.pageSubmit.emit(this.form.value);
+    if (this.form.valid) {
+      this.pageSubmit.emit(this.form.value);
+    } else {
+      this.validationHelper.touchAllControls(this.form);
+    }
   }
 
   get formValueAsString(): string {

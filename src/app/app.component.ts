@@ -11,11 +11,15 @@ export class AppComponent  {
       {
         elementType: 'Basic text',
         elementText: 'Hello Page Editor!',
+        elementVisualizationVariableOne: '',
+        elementVisualizationVariableTwo: '',
         elementRules: []
       },
       {
         elementType: 'Link',
         elementText: 'www.google.com',
+        elementVisualizationVariableOne: '',
+        elementVisualizationVariableTwo: '',
         elementRules: []
       }
     ]

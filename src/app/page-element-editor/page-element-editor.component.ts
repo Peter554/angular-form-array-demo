@@ -1,14 +1,15 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges } from '@angular/core';
-import { FormGroup, FormArray, Validators, FormBuilder } from '@angular/forms';
+import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { FormGroup, FormArray } from '@angular/forms';
 import { DummyDatabaseService } from '../services/dummy-database.service';
 import { Subscription } from 'rxjs';
 import { FormGroupFactoryService } from '../services/form-group-factory.service';
+import { ValidationHelperService } from '../services/validation-helper.service';
 
 @Component({
   selector: 'page-element-editor',
   templateUrl: './page-element-editor.component.html',
 })
-export class PageElementEditorComponent implements OnInit, OnChanges
+export class PageElementEditorComponent implements OnChanges
 {
   @Input()
   element = new FormGroup({});
@@ -16,20 +17,24 @@ export class PageElementEditorComponent implements OnInit, OnChanges
   @Output()
   deleteRequest = new EventEmitter<void>();
 
+  cachedElementType: string = '';
   elementTypeSubscription: Subscription;
 
-  constructor(private dummyDatabase: DummyDatabaseService, private formGroupFactoryService: FormGroupFactoryService) { }
-
-  ngOnInit() {
-  }
+  constructor(
+    private dummyDatabase: DummyDatabaseService,
+    private formGroupFactoryService: FormGroupFactoryService,
+    private validationHelper: ValidationHelperService
+  ) { }
 
   ngOnChanges() {
+    // if inputs changed we want to resubscribe
     if (this.elementTypeSubscription) {
       this.elementTypeSubscription.unsubscribe();
     }
 
-    this.elementTypeSubscription = this.element.get('elementType').valueChanges.subscribe(value => {
-      this.element.get('elementText').setValue(value == 'Prebuilt content' ? this.contentDataStore[0] : '');
+    // manage change of element type
+    this.elementTypeSubscription = this.element.get('elementType').valueChanges.subscribe(newElementType => {
+      this.handleTypeChange(newElementType);
     })
   }
 
@@ -37,8 +42,8 @@ export class PageElementEditorComponent implements OnInit, OnChanges
     return this.dummyDatabase.elementTypes;
   };
 
-  get questions(): string[] {
-    return this.dummyDatabase.questions;
+  get variables(): string[] {
+    return this.dummyDatabase.variables;
   }
 
   get operators(): string[] {
@@ -67,5 +72,19 @@ export class PageElementEditorComponent implements OnInit, OnChanges
 
   deleteRule(idx: number): void {
     this.rules.removeAt(idx);
+  }
+
+  handleTypeChange(newElementType): void {
+    if (this.cachedElementType == 'Prebuilt content') {
+      this.element.get('elementText').setValue('');
+    } else if (newElementType == 'Prebuilt content') {
+      this.element.get('elementText').setValue(this.contentDataStore[0]);
+    }
+
+    this.element.get('elementVisualizationVariableOne').setValue('');
+    this.element.get('elementVisualizationVariableTwo').setValue('');
+
+    this.validationHelper.makeAllControlsUntouched(this.element);
+    this.cachedElementType = newElementType;
   }
 }

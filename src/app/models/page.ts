@@ -5,11 +5,13 @@ export interface Page {
 export interface PageElement {
   elementType: string;
   elementText: string;
+  elementVisualizationVariableOne: string;
+  elementVisualizationVariableTwo: string;
   elementRules: PageElementRule[];
 }
 
 export interface PageElementRule {
-  question: string;
+  variable: string;
   operator: string;
   keyScore: number;
 }

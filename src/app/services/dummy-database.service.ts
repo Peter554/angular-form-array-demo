@@ -5,12 +5,19 @@ import { Injectable } from '@angular/core';
 })
 export class DummyDatabaseService {
 
-  elementTypes = ['Basic text', 'Link', 'Prebuilt content'];
+  elementTypes = [
+    'Basic text',
+    'Link',
+    'Prebuilt content',
+    'Univariate visualization',
+    'Bivariate visualization'
+  ];
 
-  questions = [
-    'Your age?',
-    'Your shoe size?',
-    'Your IQ?'
+  variables = [
+    'Age',
+    'Height',
+    'Weight',
+    'IQ'
   ]
 
   operators = [

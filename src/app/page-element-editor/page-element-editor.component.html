@@ -37,22 +37,48 @@
         <option [value]="elementText" *ngFor="let elementText of contentDataStore">{{ elementText.substring(0, 50) + '...' }}</option>
         </select>
       </div>
+
+      <!-- for visualization items -->
+      <div class="form-group" *ngIf="elementType == 'Univariate visualization' || elementType == 'Bivariate visualization'">
+        <label for="">Variable One</label>
+        <select class="form-control" formControlName="elementVisualizationVariableOne"
+        [ngClass]="{'is-invalid': element.get('elementVisualizationVariableOne').touched && element.hasError('variableOneMissing')}">
+        <option [value]="elementVisualizationVariableOne" *ngFor="let elementVisualizationVariableOne of variables">{{ elementVisualizationVariableOne }}</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="element.hasError('variableOneMissing') 
+        && element.get('elementVisualizationVariableOne').touched">
+        Variable One Required.    
+        </div>
+      </div>
+      <div class="form-group" *ngIf="elementType == 'Bivariate visualization'">
+        <label for="">Variable Two</label>
+        <select class="form-control" formControlName="elementVisualizationVariableTwo"
+        [ngClass]="{'is-invalid': element.get('elementVisualizationVariableTwo').touched && element.hasError('variableTwoMissing')}">
+        <option [value]="elementVisualizationVariableTwo" *ngFor="let elementVisualizationVariableTwo of variables">{{ elementVisualizationVariableTwo }}</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="element.hasError('variableTwoMissing') 
+        && element.get('elementVisualizationVariableTwo').touched">
+        Variable Two Required.    
+        </div>
+      </div>
     </div>
+
+
   
     <!-- buttons -->
     <button class="btn btn-danger mr-3 my-1" (click)="makeDeleteRequest()">Delete Element</button>
     <button class="btn btn-primary my-1" (click)="addRule()">Add Rule</button>
 
     <!-- rules -->
-    <!-- TODO extract to own component? -->
+    <!-- // TODO extract to own component? -->
     <div class="my-3" *ngIf="rules.length > 0">
       <h4 class="my-3">Element Rules</h4>
       <div *ngFor="let rule of rules.controls; let i = index" [formGroup]="rule">
         <div class="form-inline">
-          <!-- the question -->
-          <select type="text" formControlName="question" class="form-control mw-30 mr-1"
-          [ngClass]="{'is-invalid': rule.get('question').touched && rule.get('question').errors}">
-          <option [value]="question" *ngFor="let question of questions">{{ question }}</option>
+          <!-- the variable -->
+          <select type="text" formControlName="variable" class="form-control mw-30 mr-1"
+          [ngClass]="{'is-invalid': rule.get('variable').touched && rule.get('variable').errors}">
+          <option [value]="variable" *ngFor="let variable of variables">{{ variable }}</option>
           </select>
           <!-- the operator -->
           <select type="text" formControlName="operator" class="form-control mw-30 mr-1"

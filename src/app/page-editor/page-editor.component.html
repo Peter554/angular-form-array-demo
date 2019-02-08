@@ -1,8 +1,8 @@
 <!-- controls -->
 <button class="btn btn-secondary mr-3 my-1" (click)="addBlankElement()">Add Element</button>
 <button class="btn btn-danger mr-3 my-1" (click)="init()">Reset Form</button>
-<button class="btn btn-primary my-1" (click)="submitForm()" [disabled]="!form.valid">
-  Submit <span *ngIf="!form.valid">(disabled - form invalid)</span>
+<button class="btn btn-primary my-1" (click)="submitForm()">
+  Submit
 </button>
 <!-- a friendly message -->
 <div class="alert alert-secondary my-3" role="alert">
@@ -20,7 +20,7 @@
       <div class="card my-1 selectable" (click)="navToElement(i)"
       [ngClass]="{'selected': i == showElement}">
         <div class="card-body">
-          {{ i + 1 }}. <em>{{ getPreview(element.get('elementText').value) }}</em> <span class="invalid-element" *ngIf="!element.valid && allControlsAreTouched(element)"> (invalid)</span>
+          {{ i + 1 }}. <em>{{ getPreview(element.get('elementText').value) }}</em> <span class="invalid-element" *ngIf="elementIsInvalid(element)"> (invalid)</span>
         </div>
       </div>
     </div>
@@ -37,6 +37,8 @@
 <div class="card mt-5">
   <div class="card-body">
     <h2>Form Value</h2>
-    {{ formValueAsString }}
+    <pre class="m-5">
+{{ formValueAsString }}
+    </pre>
   </div>
 </div>
