@@ -1,12 +1,13 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges } from '@angular/core';
 import { FormGroup, FormArray, Validators, FormBuilder } from '@angular/forms';
 import { DummyDatabaseService } from '../services/dummy-database.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'page-element-editor',
   templateUrl: './page-element-editor.component.html',
 })
-export class PageElementEditorComponent implements OnInit
+export class PageElementEditorComponent implements OnInit, OnChanges
 {
   @Input()
   element = new FormGroup({});
@@ -14,9 +15,21 @@ export class PageElementEditorComponent implements OnInit
   @Output()
   deleteRequest = new EventEmitter<void>();
 
+  elementTypeSubscription: Subscription;
+
   constructor(private fb: FormBuilder, private dummyDatabase: DummyDatabaseService) { }
 
   ngOnInit() {
+  }
+
+  ngOnChanges() {
+    if (this.elementTypeSubscription) {
+      this.elementTypeSubscription.unsubscribe();
+    }
+
+    this.elementTypeSubscription = this.element.get('elementType').valueChanges.subscribe(value => {
+      this.element.get('elementText').setValue(value == 'Prebuilt content' ? this.contentDataStore[0] : '');
+    })
   }
 
   get elementTypes(): string[] {
@@ -29,6 +42,14 @@ export class PageElementEditorComponent implements OnInit
 
   get operators(): string[] {
     return this.dummyDatabase.operators;
+  }
+
+  get contentDataStore(): string[] {
+    return this.dummyDatabase.contentDataStore;
+  }
+
+  get elementType(): string {
+    return this.element.get('elementType').value;
   }
 
   get rules(): FormArray {

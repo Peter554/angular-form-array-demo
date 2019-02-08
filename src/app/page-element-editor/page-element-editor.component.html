@@ -16,7 +16,7 @@
       </div>
   
       <!-- element text -->
-      <div class="form-group">
+      <div class="form-group" *ngIf="elementType != 'Prebuilt content'">
         <label for="">Element text</label>
         <input type="text" formControlName="elementText" class="form-control"
         [ngClass]="{'is-invalid': element.get('elementText').touched && element.get('elementText').errors}">
@@ -27,6 +27,15 @@
         <div class="invalid-feedback" *ngIf="element.get('elementText').hasError('minlength') && element.get('elementText').touched">
           Element text must be at least 5 characters long.
         </div>
+      </div>
+
+      <!-- element text, for predefined content items -->
+      <div class="form-group" *ngIf="elementType == 'Prebuilt content'">
+        <label for="">Element text</label>
+        <select class="form-control" formControlName="elementText"
+        [ngClass]="{'is-invalid': element.get('elementText').touched && element.get('elementText').errors}">
+        <option [value]="elementText" *ngFor="let elementText of contentDataStore">{{ elementText.substring(0, 50) + '...' }}</option>
+        </select>
       </div>
     </div>
   
