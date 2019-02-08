@@ -1,1 +1,5 @@
 /* Add application styles & imports to this file! */
+
+.mw-30 {
+    max-width: 30%;
+}

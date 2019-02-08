@@ -47,7 +47,7 @@ export class PageEditorComponent implements OnInit
     const elementForm = this.fb.group({
       elementType: ['', [Validators.required]],
       elementText: ['', [Validators.required, Validators.minLength(5)]],
-      elementNotes: this.fb.array([])
+      elementRules: this.fb.array([])
     })
 
     this.elements.push(elementForm);
@@ -55,16 +55,18 @@ export class PageEditorComponent implements OnInit
   }
 
   addElement(element: PageElement): void {
-    const elementNoteForms = element.elementNotes.map(note => {
+    const elementRuleForms = element.elementRules.map(rule => {
         return this.fb.group({
-          noteText: [note.noteText, [Validators.required]]
+          question: [rule.question, [Validators.required]],
+          operator: [rule.operator, [Validators.required]],
+          keyScore: [rule.keyScore, [Validators.required]],
         })
     })
 
     const elementForm = this.fb.group({
       elementType: [element.elementType, [Validators.required]],
       elementText: [element.elementText, [Validators.required, Validators.minLength(5)]],
-      elementNotes: this.fb.array(elementNoteForms)
+      elementRules: this.fb.array(elementRuleForms)
     })
 
     this.elements.push(elementForm);

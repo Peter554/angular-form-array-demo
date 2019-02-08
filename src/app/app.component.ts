@@ -11,16 +11,12 @@ export class AppComponent  {
       {
         elementType: 'Basic text',
         elementText: 'Hello Page Editor!',
-        elementNotes: [
-          {
-            noteText: 'A simple text note.'
-          }
-        ]
+        elementRules: []
       },
       {
         elementType: 'Link',
         elementText: 'www.google.com',
-        elementNotes: []
+        elementRules: []
       }
     ]
   }

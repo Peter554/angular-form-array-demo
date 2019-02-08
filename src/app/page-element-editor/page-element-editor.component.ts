@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormGroup, FormArray, Validators, FormBuilder } from '@angular/forms';
+import { DummyDatabaseService } from '../services/dummy-database.service';
 
 @Component({
   selector: 'page-element-editor',
@@ -13,30 +14,42 @@ export class PageElementEditorComponent implements OnInit
   @Output()
   deleteRequest = new EventEmitter<void>();
 
-  elementTypes = ['Basic text', 'Link'];
-
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private dummyDatabase: DummyDatabaseService) { }
 
   ngOnInit() {
   }
 
-  get notes(): FormArray {
-    return this.element.get('elementNotes') as FormArray;
+  get elementTypes(): string[] {
+    return this.dummyDatabase.elementTypes;
+  };
+
+  get questions(): string[] {
+    return this.dummyDatabase.questions;
+  }
+
+  get operators(): string[] {
+    return this.dummyDatabase.operators;
+  }
+
+  get rules(): FormArray {
+    return this.element.get('elementRules') as FormArray;
   }
 
   makeDeleteRequest() {
     this.deleteRequest.emit();
   }
 
-  addNote(): void {
-    const emptyNote = this.fb.group({
-      noteText: ['', [Validators.required]]
+  addRule(): void {
+    const emptyRule = this.fb.group({
+      question: [this.questions[0], [Validators.required]],
+      operator: [this.operators[0], [Validators.required]],
+      keyScore: [5, [Validators.required]],
     })
 
-    this.notes.push(emptyNote);
+    this.rules.push(emptyRule);
   }
 
-  deleteNote(idx: number): void {
-    this.notes.removeAt(idx);
+  deleteRule(idx: number): void {
+    this.rules.removeAt(idx);
   }
 }

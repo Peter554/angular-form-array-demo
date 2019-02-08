@@ -7,7 +7,7 @@
         <label for="">Element type</label>
         <select class="form-control" formControlName="elementType"
         [ngClass]="{'is-invalid': element.get('elementType').touched && element.get('elementType').errors}">
-          <option [value]="elementType" *ngFor="let elementType of elementTypes">{{ elementType }}</option>
+        <option [value]="elementType" *ngFor="let elementType of elementTypes">{{ elementType }}</option>
         </select>
         <!-- validation -->
         <div class="invalid-feedback" *ngIf="element.get('elementType').hasError('required') &&element.get('elementType').touched">
@@ -32,22 +32,29 @@
   
     <!-- buttons -->
     <button class="btn btn-danger mr-3 my-1" (click)="makeDeleteRequest()">Delete Element</button>
-    <button class="btn btn-primary my-1" (click)="addNote()">Add Note</button>
+    <button class="btn btn-primary my-1" (click)="addRule()">Add Rule</button>
 
-    <!-- notes -->
+    <!-- rules -->
     <!-- TODO extract to own component? -->
-    <div class="my-3" *ngIf="notes.length > 0">
-      <h4 class="my-3">Element Notes</h4>
-      <div *ngFor="let note of notes.controls; let i = index" [formGroup]="note">
-        <div class="form-group">
-          <label for="">Note</label>
-          <input type="text" formControlName="noteText" class="form-control"
-          [ngClass]="{'is-invalid': note.get('noteText').touched && note.get('noteText').errors}">
-          <div class="invalid-feedback" *ngIf="note.get('noteText').hasError('required') && note.get('noteText').touched">
-            Note text is required.
-          </div>
-          <button class="btn btn-danger my-2" (click)="deleteNote(i)">Delete Note</button>
+    <div class="my-3" *ngIf="rules.length > 0">
+      <h4 class="my-3">Element Rules</h4>
+      <div *ngFor="let rule of rules.controls; let i = index" [formGroup]="rule">
+        <div class="form-inline">
+          <!-- the question -->
+          <select type="text" formControlName="question" class="form-control mw-30 mr-1"
+          [ngClass]="{'is-invalid': rule.get('question').touched && rule.get('question').errors}">
+          <option [value]="question" *ngFor="let question of questions">{{ question }}</option>
+          </select>
+          <!-- the operator -->
+          <select type="text" formControlName="operator" class="form-control mw-30 mr-1"
+          [ngClass]="{'is-invalid': rule.get('operator').touched && rule.get('operator').errors}">
+          <option [value]="operator" *ngFor="let operator of operators">{{ operator }}</option>
+          </select>
+          <!-- the score -->
+          <input type="text" formControlName="keyScore" class="form-control mw-30"
+          [ngClass]="{'is-invalid': rule.get('keyScore').touched && rule.get('keyScore').errors}">
         </div>
+        <button class="btn btn-danger my-2" (click)="deleteRule(i)">Delete Rule</button>
       </div>
     </div>
 

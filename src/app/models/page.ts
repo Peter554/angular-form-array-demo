@@ -5,10 +5,12 @@ export interface Page {
 export interface PageElement {
   elementType: string;
   elementText: string;
-  elementNotes: PageElementNote[];
+  elementRules: PageElementRule[];
 }
 
-export interface PageElementNote {
-  noteText: string;
+export interface PageElementRule {
+  question: string;
+  operator: string;
+  keyScore: number;
 }
 
