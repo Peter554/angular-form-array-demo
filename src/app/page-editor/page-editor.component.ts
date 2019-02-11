@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormArray, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { Page, PageElement } from '../models/page';
-import { FormGroupFactoryService } from '../services/form-group-factory.service';
-import { ValidationHelperService } from '../services/validation-helper.service';
+import { Page } from '../_models/Page';
+import { FormGroupFactoryService } from '../_services/form-group-factory.service';
+import { ValidationHelperService } from '../_services/validation-helper.service';
+import { PageElement } from '../_models/PageElement';
 
 @Component({
   selector: 'page-editor',

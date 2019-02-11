@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Page, PageElement } from './models/page';
+import { Page } from './_models/Page';
 
 @Component({
   selector: 'my-app',

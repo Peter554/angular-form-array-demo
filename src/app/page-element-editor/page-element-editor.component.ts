@@ -1,9 +1,9 @@
 import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { FormGroup, FormArray } from '@angular/forms';
-import { DummyDatabaseService } from '../services/dummy-database.service';
+import { DummyDatabaseService } from '../_services/dummy-database.service';
 import { Subscription } from 'rxjs';
-import { FormGroupFactoryService } from '../services/form-group-factory.service';
-import { ValidationHelperService } from '../services/validation-helper.service';
+import { FormGroupFactoryService } from '../_services/form-group-factory.service';
+import { ValidationHelperService } from '../_services/validation-helper.service';
 
 @Component({
   selector: 'page-element-editor',

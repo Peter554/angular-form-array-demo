@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { DummyDatabaseService } from './dummy-database.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { PageElementRule, PageElement } from '../models/page';
 import { ValidationHelperService } from './validation-helper.service';
+import { PageElement } from '../_models/PageElement';
+import { PageElementRule } from '../_models/PageElementRule';
 
 @Injectable({
   providedIn: 'root'
@@ -54,7 +55,7 @@ export class FormGroupFactoryService {
     })
   }
 
-  getRuleForm(rule: PageElementRule) {
+  getRuleForm(rule: PageElementRule): FormGroup {
     return this.fb.group({
       variable: [rule.variable, [Validators.required]],
       operator: [rule.operator, [Validators.required]],
