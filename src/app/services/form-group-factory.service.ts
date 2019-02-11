@@ -43,8 +43,6 @@ export class FormGroupFactoryService {
     }, {validator: this.validationHelper.visualizationValidator})
   }
 
-
-
   getBlankRuleForm(): FormGroup {
     const variables = this.dummyDatabase.variables;
     const operators = this.dummyDatabase.operators;
